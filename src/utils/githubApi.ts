@@ -15,6 +15,7 @@ export async function fetchGitHubRepos(username: string, topic: string) {
     }
 
     const data = await response.json();
+    console.log(data);
     return data.items;
   } catch (error) {
     console.error("Error fetching repositories:", error);
