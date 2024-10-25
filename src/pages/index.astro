@@ -10,10 +10,11 @@ const POSTS_QUERY = `*[
 const posts = await sanityClient.fetch<SanityDocument[]>(POSTS_QUERY);
 
 import Layout from "../layouts/Layout.astro";
+import About from "../components/sections/About.astro";
 ---
 
 <Layout title="Welcome to my portfolio!">
-  <h1 class="text-4xl font-regular mb-8 font-aeonik">Posts</h1>
+  <About />
   <ul class="flex flex-col gap-y-4">
     {
       posts.map((post) => (

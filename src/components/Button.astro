@@ -3,14 +3,22 @@ interface Props {
   href: string;
   target?: "_blank" | "_self";
   style?: "primary" | "secondary";
+  size?: "sm" | "md" | "lg" | "icon";
 }
 
-const { href, target = "_self", style = "primary" } = Astro.props;
+const { href, target = "_self", style = "primary", size = "md" } = Astro.props;
 const rel = target === "_blank" ? "noopener noreferrer" : "";
 
 const styleClasses = {
   primary: "bg-foreground text-background",
-  secondary: "bg-background text-foreground border-2 border-foreground",
+  secondary: "bg-muted bg-opacity-0 text-foreground border-2 border-foreground",
+};
+
+const sizeClasses = {
+  sm: "text-sm py-2 px-3",
+  md: "text-base py-3 px-6 font-semibold",
+  lg: "text-lg py-4 px-8 font-semibold",
+  icon: "p-2",
 };
 ---
 
@@ -18,7 +26,7 @@ const styleClasses = {
   href={href}
   target={target}
   rel={rel}
-  class={`py-3 px-6 rounded-full font-semibold ${styleClasses[style]}`}
+  class={`inline-block rounded-full ${style == "primary" ? "hover:bg-opacity-90" : "hover:bg-opacity-10"} transition-colors ${styleClasses[style]} ${sizeClasses[size]}`}
 >
   <slot />
 </a>

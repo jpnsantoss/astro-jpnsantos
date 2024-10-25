@@ -5,10 +5,7 @@ interface Props {
 
 const { title } = Astro.props;
 import "@fontsource-variable/inter";
-import { Image } from "astro:assets";
-
-import profilePicture from "../images/profile.jpeg";
-import Button from "../components/Button.astro";
+import Header from "../components/sections/Header.astro";
 ---
 
 <html lang="en">
@@ -23,29 +20,7 @@ import Button from "../components/Button.astro";
   <body
     class="grid lg:grid-cols-3 gap-y-8 lg:gap-24 container py-16 px-4 bg-background text-foreground"
   >
-    <header class="space-y-8">
-      <div class="space-y-4">
-        <Image
-          src={profilePicture}
-          alt="Profile Picture"
-          width="150"
-          height="150"
-          class="rounded-full"
-        />
-        <div class="space-y-2">
-          <h1 class="font-bold text-4xl">João Santos</h1>
-          <h2 class="text-xl">Full-stack web developer</h2>
-        </div>
-        <h3 class="text-lg">📍 Porto, Portugal</h3>
-        <p class="text-sm">
-          My passion is to build not only beautiful, but also functional
-          websites and applications.
-        </p>
-      </div>
-      <ul>
-        <Button href="cv.pdf" target="_blank" style="primary">Resume</Button>
-      </ul>
-    </header>
+    <Header />
     <main class="col-span-2">
       <slot />
     </main>
