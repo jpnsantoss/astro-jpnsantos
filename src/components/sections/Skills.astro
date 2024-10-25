@@ -1,4 +1,60 @@
-<section class="space-y-6 pb-16">
+---
+import Badge from "../Badge.astro";
+
+const languages = [
+  "TypeScript",
+  "Python",
+  "Go",
+  "JavaScript",
+  "C / C++",
+  "PHP",
+  "Java",
+  "Dart",
+  "SQL",
+];
+
+const frontend = ["React", "Svelte", "Astro", "Flutter", "Vue", "Angular"];
+
+const backend = [
+  "Next.js",
+  "Laravel",
+  "Express",
+  "Django",
+  "Firebase",
+  "PostgreSQL",
+  "MySQL",
+  "MongoDB",
+];
+
+const utilities = ["Docker", "Git", "AWS", "Figma", "Salesforce", "Jira"];
+---
+
+<section class="space-y-8 pb-16">
   <h2 class="text-4xl font-bold">Skills</h2>
-  <div class="space-y-4"></div>
+  <div class="space-y-6">
+    <div class="space-y-4">
+      <h3 class="text-2xl font-semibold">Languages</h3>
+      <div class="flex flex-wrap gap-1">
+        {languages.map((item) => <Badge color="blue">{item}</Badge>)}
+      </div>
+    </div>
+    <div class="space-y-2">
+      <h3 class="text-2xl font-semibold">Frontend</h3>
+      <div class="flex flex-wrap gap-1">
+        {frontend.map((item) => <Badge color="green">{item}</Badge>)}
+      </div>
+    </div>
+    <div class="space-y-2">
+      <h3 class="text-2xl font-semibold">Backend</h3>
+      <div class="flex flex-wrap gap-1">
+        {backend.map((item) => <Badge color="red">{item}</Badge>)}
+      </div>
+    </div>
+    <div class="space-y-2">
+      <h3 class="text-2xl font-semibold">Utilities</h3>
+      <div class="flex flex-wrap gap-1">
+        {utilities.map((item) => <Badge color="yellow">{item}</Badge>)}
+      </div>
+    </div>
+  </div>
 </section>

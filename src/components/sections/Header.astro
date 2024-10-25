@@ -2,6 +2,15 @@
 import { Image } from "astro:assets";
 
 import profilePicture from "../../assets/images/profile.jpeg";
+import LogoGithub from "../../assets/icons/LogoGithub.astro";
+import LogoInstagram from "../../assets/icons/LogoInstagram.astro";
+import LogoLinkedin from "../../assets/icons/LogoLinkedIn.astro";
+import LogoTwitter from "../../assets/icons/LogoTwitter.astro";
+
+import LocationIcon from "../../assets/icons/LocationIcon.astro";
+import MailIcon from "../../assets/icons/MailIcon.astro";
+import LinkIcon from "../../assets/icons/LinkIcon.astro";
+
 import Button from "../../components/Button.astro";
 ---
 
@@ -15,16 +24,62 @@ import Button from "../../components/Button.astro";
       class="rounded-full"
     />
     <div class="space-y-2">
-      <h1 class="font-bold text-4xl">João Santos</h1>
-      <h2 class="text-xl">Full-stack web developer</h2>
+      <h2 class="font-bold text-4xl">João Santos</h2>
+      <h3 class="text-xl">Full-stack web developer</h3>
     </div>
-    <h3 class="text-lg">📍 Porto, Portugal</h3>
+    <ul class="space-y-4">
+      <li class="flex items-center gap-2">
+        <LocationIcon />
+        <span>Porto, Portugal</span>
+      </li>
+      <li class="flex items-center gap-2">
+        <MailIcon />
+        <span>jpnsantos14@gmail.com</span>
+      </li>
+    </ul>
     <p class="text-sm">
       My passion is to build not only beautiful, but also functional websites
       and applications.
     </p>
   </div>
-  <ul>
-    <Button href="cv.pdf" target="_blank">Resume</Button>
+  <ul class="flex items-center gap-4">
+    <Button href="cv.pdf" target="_blank">
+      <LinkIcon />
+      Resume
+    </Button>
+    <div class="flex items-center gap-2">
+      <Button
+        href="ww.google.com"
+        target="_blank"
+        size="icon"
+        style="secondary"
+      >
+        <LogoGithub />
+      </Button>
+      <Button
+        href="ww.google.com"
+        target="_blank"
+        size="icon"
+        style="secondary"
+      >
+        <LogoLinkedin />
+      </Button>
+      <Button
+        href="ww.google.com"
+        target="_blank"
+        size="icon"
+        style="secondary"
+      >
+        <LogoInstagram />
+      </Button>
+      <Button
+        href="ww.google.com"
+        target="_blank"
+        size="icon"
+        style="secondary"
+      >
+        <LogoTwitter />
+      </Button>
+    </div>
   </ul>
 </header>
