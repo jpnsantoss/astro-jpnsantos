@@ -8,9 +8,11 @@ const POSTS_QUERY = `*[
 ]|order(publishedAt desc)[0...12]{_id, title, slug, publishedAt}`;
 
 const posts = await sanityClient.fetch<SanityDocument[]>(POSTS_QUERY);
+
+import Layout from "../layouts/Layout.astro";
 ---
 
-<main class="container mx-auto min-h-screen max-w-3xl p-8">
+<Layout title="Welcome to my portfolio!">
   <h1 class="text-4xl font-regular mb-8 font-aeonik">Posts</h1>
   <ul class="flex flex-col gap-y-4">
     {
@@ -24,4 +26,4 @@ const posts = await sanityClient.fetch<SanityDocument[]>(POSTS_QUERY);
       ))
     }
   </ul>
-</main>
+</Layout>
