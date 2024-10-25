@@ -1,11 +1,7 @@
 ---
-interface Props {
-  title: string;
-}
+import Header from "../components/sections/Header.astro";
 
 const { title } = Astro.props;
-import "@fontsource-variable/inter";
-import Header from "../components/sections/Header.astro";
 ---
 
 <html lang="en">
@@ -17,12 +13,14 @@ import Header from "../components/sections/Header.astro";
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
-  <body
-    class="grid lg:grid-cols-3 gap-y-8 lg:gap-24 container py-16 px-4 bg-background text-foreground"
-  >
-    <Header />
-    <main class="col-span-2">
-      <slot />
-    </main>
+  <body class="container px-4 bg-background text-foreground">
+    <div class="grid lg:grid-cols-3 gap-y-8 lg:gap-24">
+      <div class="lg:sticky lg:top-0 py-16 lg:self-start">
+        <Header />
+      </div>
+      <main class="col-span-2 overflow-y-auto py-16">
+        <slot />
+      </main>
+    </div>
   </body>
 </html>

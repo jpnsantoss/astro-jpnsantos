@@ -1,0 +1,67 @@
+---
+import Badge from "../Badge.astro";
+
+interface Experience {
+  title: string;
+  company: {
+    name: string;
+    logo: string;
+  };
+  location: string;
+  startDate: string;
+  endDate?: string;
+  description: string;
+}
+
+const experiences: Experience[] = [
+  {
+    title: "Software Engineer",
+    company: {
+      name: "Facebook",
+      logo: "https://www.facebook.com/images/fb_icon_325x325.png",
+    },
+    location: "Menlo Park, CA",
+    startDate: "2017-01-01",
+    endDate: "2019-01-01",
+    description:
+      "Developer for the company's software, primarily focused on the website and internal applications. Responsible for hosting and maintenance of the software. Also provide IT support as needed.",
+  },
+];
+
+function formatDate(dateString: string) {
+  const options = { year: "numeric", month: "long" };
+  return new Date(dateString).toLocaleDateString();
+}
+---
+
+<section class="space-y-8 pb-16">
+  <h2 class="text-4xl font-bold text-primary">Experience</h2>
+  <div class="space-y-6">
+    {
+      experiences.map((experience) => (
+        <div class="bg-muted rounded-card p-6 flex items-start space-x-4">
+          <img
+            src={experience.company.logo}
+            alt={experience.company.name}
+            class="w-20 h-20 rounded-full object-cover"
+          />
+          <div class="flex-1">
+            <h3 class="text-2xl text-primary font-semibold">
+              {experience.title}
+            </h3>
+            <div class="flex gap-2 items-center">
+              <p class="text-lg text-foreground">{experience.company.name}</p>
+              <span>·</span>
+              <p class="text-sm text-muted-foreground">{experience.location}</p>
+            </div>
+            <p class="text-sm text-muted-foreground">
+              {formatDate(experience.startDate)} -{" "}
+              {experience.endDate ? formatDate(experience.endDate) : "Present"}
+            </p>
+            <p class="mt-4 text-gray-700">{experience.description}</p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>

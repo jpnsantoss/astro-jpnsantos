@@ -1,0 +1,65 @@
+---
+import Badge from "../Badge.astro";
+
+interface Education {
+  title: string;
+  institution: {
+    name: string;
+    logo: string;
+  };
+  location: string;
+  startDate: string;
+  endDate?: string;
+}
+
+const educationList: Education[] = [
+  {
+    title: "Software Engineer",
+    institution: {
+      name: "Facebook",
+      logo: "https://www.facebook.com/images/fb_icon_325x325.png",
+    },
+    location: "Menlo Park, CA",
+    startDate: "2017-01-01",
+    endDate: "2019-01-01",
+  },
+];
+
+function formatDate(dateString: string) {
+  const options = { year: "numeric", month: "long" };
+  return new Date(dateString).toLocaleDateString();
+}
+---
+
+<section class="space-y-8 pb-16">
+  <h2 class="text-4xl font-bold text-primary">Education</h2>
+  <div class="space-y-6">
+    {
+      educationList.map((education) => (
+        <div class="bg-muted rounded-card p-6 flex items-start space-x-4">
+          <img
+            src={education.institution.logo}
+            alt={education.institution.name}
+            class="w-20 h-20 rounded-full object-cover"
+          />
+          <div class="flex-1">
+            <h3 class="text-2xl text-primary font-semibold">
+              {education.title}
+            </h3>
+            <div class="flex gap-2 items-center">
+              <p class="text-lg text-foreground">
+                {education.institution.name}
+              </p>
+              <span>·</span>
+              <p class="text-sm text-muted-foreground">{education.location}</p>
+            </div>
+            <p class="text-sm text-muted-foreground">
+              {formatDate(education.startDate)} -{" "}
+              {education.endDate ? formatDate(education.endDate) : "Present"}
+            </p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>

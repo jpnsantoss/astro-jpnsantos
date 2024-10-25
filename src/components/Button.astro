@@ -10,8 +10,8 @@ const { href, target = "_self", style = "primary", size = "md" } = Astro.props;
 const rel = target === "_blank" ? "noopener noreferrer" : "";
 
 const styleClasses = {
-  primary: "bg-foreground text-background",
-  secondary: "bg-muted bg-opacity-0 text-foreground border-2 border-foreground",
+  primary: "bg-primary text-background",
+  secondary: "bg-background text-primary border-2 border-primary",
 };
 
 const sizeClasses = {
@@ -26,7 +26,7 @@ const sizeClasses = {
   href={href}
   target={target}
   rel={rel}
-  class={`flex items-center gap-2 rounded-full ${style == "primary" ? "hover:bg-opacity-90" : "hover:bg-opacity-10"} transition-colors ${styleClasses[style]} ${sizeClasses[size]}`}
+  class={`flex items-center gap-2 rounded-full ${style == "primary" ? "hover:bg-foreground" : "hover:bg-muted"} transition-colors ${styleClasses[style]} ${sizeClasses[size]}`}
 >
   <slot />
 </a>

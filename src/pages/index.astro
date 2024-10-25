@@ -12,11 +12,17 @@ const posts = await sanityClient.fetch<SanityDocument[]>(POSTS_QUERY);
 import Layout from "../layouts/Layout.astro";
 import About from "../components/sections/About.astro";
 import Skills from "../components/sections/Skills.astro";
+import Experience from "../components/sections/Experience.astro";
+import Education from "../components/sections/Education.astro";
+import Projects from "../components/sections/Projects.astro";
 ---
 
 <Layout title="Welcome to my portfolio!">
   <About />
   <Skills />
+  <Experience />
+  <Education />
+  <Projects />
   <!-- <ul class="flex flex-col gap-y-4">
     {
       posts.map((post) => (

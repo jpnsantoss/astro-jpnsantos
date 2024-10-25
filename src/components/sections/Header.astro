@@ -4,7 +4,7 @@ import { Image } from "astro:assets";
 import profilePicture from "../../assets/images/profile.jpeg";
 import LogoGithub from "../../assets/icons/LogoGithub.astro";
 import LogoInstagram from "../../assets/icons/LogoInstagram.astro";
-import LogoLinkedin from "../../assets/icons/LogoLinkedIn.astro";
+import LogoLinkedIn from "../../assets/icons/LogoLinkedIn.astro";
 import LogoTwitter from "../../assets/icons/LogoTwitter.astro";
 
 import LocationIcon from "../../assets/icons/LocationIcon.astro";
@@ -24,15 +24,15 @@ import Button from "../../components/Button.astro";
       class="rounded-full"
     />
     <div class="space-y-2">
-      <h2 class="font-bold text-4xl">João Santos</h2>
+      <h2 class="font-bold text-4xl text-primary">João Santos</h2>
       <h3 class="text-xl">Full-stack web developer</h3>
     </div>
     <ul class="space-y-4">
-      <li class="flex items-center gap-2">
+      <li class="flex items-center gap-2 text-primary">
         <LocationIcon />
         <span>Porto, Portugal</span>
       </li>
-      <li class="flex items-center gap-2">
+      <li class="flex items-center gap-2 text-primary">
         <MailIcon />
         <span>jpnsantos14@gmail.com</span>
       </li>
@@ -62,7 +62,7 @@ import Button from "../../components/Button.astro";
         size="icon"
         style="secondary"
       >
-        <LogoLinkedin />
+        <LogoLinkedIn />
       </Button>
       <Button
         href="ww.google.com"
