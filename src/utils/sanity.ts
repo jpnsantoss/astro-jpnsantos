@@ -1,44 +1,4 @@
-import type { PortableTextBlock } from "@portabletext/types";
 import { sanityClient } from "sanity:client";
-
-const PERSONAL_INFO_QUERY = `*[_type == "personalInfo"][0]{
-  name,
-  "profilePicture": profilePicture.asset->url,
-  location,
-  email,
-  description,
-  "resume": resume.asset->url,
-  github,
-  linkedin,
-  instagram,
-  twitter,
-  aboutMe
-}`;
-
-export interface PersonalInfo {
-  _type: "post";
-  _createdAt: string;
-  name: string;
-  email: string;
-  description: string;
-  resume: string;
-  github: string;
-  linkedin: string;
-  instagram: string;
-  twitter: string;
-  profilePicture: string;
-  location: string;
-  aboutMe: PortableTextBlock[];
-}
-
-export async function getPersonalInfo(): Promise<PersonalInfo> {
-  return await sanityClient.fetch(PERSONAL_INFO_QUERY);
-}
-
-export async function getAboutMe(): Promise<PortableTextBlock[]> {
-  const data = await getPersonalInfo();
-  return data.aboutMe;
-}
 
 const SKILLS_QUERY = `*[_type == "skill"]{
   _id,

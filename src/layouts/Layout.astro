@@ -2,8 +2,6 @@
 import Header from "../components/sections/Header.astro";
 
 const { title } = Astro.props;
-import { getPersonalInfo } from "../utils/sanity";
-const personalInfo = await getPersonalInfo();
 ---
 
 <html lang="en">
@@ -17,10 +15,10 @@ const personalInfo = await getPersonalInfo();
   </head>
   <body class="container px-4 bg-background text-foreground">
     <div class="grid lg:grid-cols-3 gap-y-8 lg:gap-24">
-      <div class="lg:sticky lg:top-0 py-16 lg:self-start">
+      <div class="lg:sticky lg:top-0 py-4 lg:self-start">
         <Header />
       </div>
-      <main class="col-span-2 overflow-y-auto py-16">
+      <main class="col-span-2 overflow-y-auto py-4">
         <slot />
       </main>
     </div>

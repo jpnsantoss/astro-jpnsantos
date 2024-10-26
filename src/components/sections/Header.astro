@@ -1,9 +1,22 @@
 ---
-import { getPersonalInfo, type PersonalInfo } from "../../utils/sanity";
 import { Image } from "astro:assets";
 import Button from "../../components/Button.astro";
+import { type PersonalInfo } from "../../types";
+const personalInfo: PersonalInfo = {
+  name: "João Santos",
+  subtitle: "Full-stack web developer",
+  email: "jpnsantos14@gmail.com",
+  location: "Porto, Portugal",
+  description:
+    "My passion is to build not only beautiful, but also functional websites and applications.",
+  resume: "/cv.pdf",
+  github: "https://github.com/jpnsantoss",
+  linkedin: "https://linkedin.com/in/jpnsantoss",
+  instagram: "https://www.instagram.com/jp.santoss_/",
+  twitter: "https://x.com/jpnsantoss",
+};
 
-const personalInfo: PersonalInfo = await getPersonalInfo();
+import ProfilePicture from "../../assets/images/profile.jpeg";
 
 import LogoLinkedIn from "../../assets/icons/LogoLinkedIn.astro";
 import LogoTwitter from "../../assets/icons/LogoTwitter.astro";
@@ -17,7 +30,7 @@ import LocationIcon from "../../assets/icons/LocationIcon.astro";
 <header class="space-y-8">
   <div class="space-y-4">
     <Image
-      src={personalInfo.profilePicture}
+      src={ProfilePicture}
       alt="Profile Picture"
       width="150"
       height="150"
@@ -25,7 +38,7 @@ import LocationIcon from "../../assets/icons/LocationIcon.astro";
     />
     <div class="space-y-2">
       <h2 class="font-bold text-4xl text-primary">{personalInfo.name}</h2>
-      <h3 class="text-xl">Full-stack web developer</h3>
+      <h3 class="text-xl">{personalInfo.subtitle}</h3>
     </div>
     <ul class="space-y-4">
       <li class="flex items-center gap-2 text-primary">

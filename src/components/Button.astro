@@ -2,16 +2,24 @@
 interface Props {
   href: string;
   target?: "_blank" | "_self";
-  style?: "primary" | "secondary";
+  style?: "primary" | "secondary" | "link";
   size?: "sm" | "md" | "lg" | "icon";
+  class?: string;
 }
 
-const { href, target = "_self", style = "primary", size = "md" } = Astro.props;
+const {
+  href,
+  target = "_self",
+  style = "primary",
+  size = "md",
+  class: customClass = "",
+} = Astro.props;
 const rel = target === "_blank" ? "noopener noreferrer" : "";
 
 const styleClasses = {
   primary: "bg-primary text-background",
   secondary: "bg-background text-primary border-2 border-primary",
+  link: "text-primary hover:underline",
 };
 
 const sizeClasses = {
@@ -26,7 +34,7 @@ const sizeClasses = {
   href={href}
   target={target}
   rel={rel}
-  class={`flex items-center gap-2 rounded-full ${style == "primary" ? "hover:bg-foreground" : "hover:bg-muted"} transition-colors ${styleClasses[style]} ${sizeClasses[size]}`}
+  class={`flex items-center justify-center gap-2 rounded-full ${style == "primary" ? "hover:bg-foreground" : "hover:bg-muted"} transition-colors ${styleClasses[style]} ${sizeClasses[size]} ${customClass}`}
 >
   <slot />
 </a>

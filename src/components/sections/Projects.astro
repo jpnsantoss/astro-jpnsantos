@@ -1,28 +1,71 @@
 ---
-import { fetchGitHubRepos, fetchRepoReadme } from "../../utils/githubApi";
+import { Image } from "astro:assets";
+import LinkIcon from "../../assets/icons/LinkIcon.astro";
+import LogoGithub from "../../assets/icons/LogoGithub.astro";
+import { fetchGitHubRepos } from "../../utils/githubApi";
+import Badge from "../Badge.astro";
+import Button from "../Button.astro";
 
-const username = "jpnsantoss";
-const topic = "portfolio";
-
-const repos = await fetchGitHubRepos(username, topic);
+const repos = await fetchGitHubRepos("jpnsantoss");
 ---
 
 <section class="space-y-8 pb-16">
-  <h2 class="text-4xl font-bold text-primary">Projects</h2>
+  <h2 class="text-4xl text-primary font-bold">Projects</h2>
   <div class="space-y-6">
     {
       repos.length > 0 ? (
         repos.map((repo: any) => (
-          <div class="bg-muted rounded-card p-6 flex items-center justify-between space-x-4">
-            <h3 class="text-2xl font-semibold text-primary">{repo.name}</h3>
-            <p class="text-lg">{repo.description}</p>
-            <a
-              href={repo.html_url}
-              class="text-primary hover:underline"
-              target="_blank"
-            >
-              View on GitHub
-            </a>
+          <div class="bg-muted rounded-lg p-6 border grid md:grid-cols-3 gap-4 items-center">
+            <div class="md:col-span-2">
+              {repo.project_details?.title ? (
+                <div>
+                  <h3 class="text-2xl font-semibold text-primary">
+                    {repo.project_details.title}
+                  </h3>
+                  <h4 class="text-lg text-muted-foreground">{repo.name}</h4>
+                </div>
+              ) : (
+                <h3 class="text-2xl font-semibold text-primary">{repo.name}</h3>
+              )}
+              <h4 class="text-primary">{repo.description}</h4>
+              <p class="text-sm mt-4">{repo.project_details?.description}</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                {repo.project_details?.tools.map((tool: string) => (
+                  <Badge>{tool}</Badge>
+                ))}
+              </div>
+              <div class="flex items-center mt-4">
+                <Button
+                  href={repo.html_url}
+                  target="_blank"
+                  size="sm"
+                  style="link"
+                >
+                  <LogoGithub class="w-5 h-5 mr-1" />
+                  View code
+                </Button>
+                {repo.homepage && (
+                  <Button
+                    href={repo.homepage}
+                    target="_blank"
+                    size="sm"
+                    style="link"
+                  >
+                    <LinkIcon class="w-5 h-5 mr-1" />
+                    Live demo
+                  </Button>
+                )}
+              </div>
+            </div>
+            {repo.project_details?.thumbnail && (
+              <Image
+                src={repo.project_details.thumbnail}
+                alt="Thumbnail"
+                width={400}
+                height={200}
+                class="rounded-lg w-full"
+              />
+            )}
           </div>
         ))
       ) : (
