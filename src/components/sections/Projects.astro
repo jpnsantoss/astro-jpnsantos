@@ -5,35 +5,24 @@ const username = "jpnsantoss";
 const topic = "portfolio";
 
 const repos = await fetchGitHubRepos(username, topic);
-
-// Fetch README for each repository
-for (const repo of repos) {
-  repo.readme = await fetchRepoReadme(repo.owner.login, repo.name);
-}
 ---
 
 <section class="space-y-8 pb-16">
-  <h2 class="text-4xl font-bold">Projects</h2>
+  <h2 class="text-4xl font-bold text-primary">Projects</h2>
   <div class="space-y-6">
     {
       repos.length > 0 ? (
         repos.map((repo: any) => (
-          <div class="bg-white shadow-lg rounded-lg p-6 border border-gray-200">
-            <h3 class="text-2xl font-semibold text-blue-600">{repo.name}</h3>
-            <p class="text-lg text-gray-700">{repo.description}</p>
+          <div class="bg-muted rounded-card p-6 flex items-center justify-between space-x-4">
+            <h3 class="text-2xl font-semibold text-primary">{repo.name}</h3>
+            <p class="text-lg">{repo.description}</p>
             <a
               href={repo.html_url}
-              class="text-blue-500 hover:underline"
+              class="text-primary hover:underline"
               target="_blank"
             >
               View on GitHub
             </a>
-            {repo.readme && (
-              <div class="mt-4">
-                <h4 class="text-xl font-semibold">README</h4>
-                <pre class="bg-gray-100 p-4 rounded">{repo.readme}</pre>
-              </div>
-            )}
           </div>
         ))
       ) : (
