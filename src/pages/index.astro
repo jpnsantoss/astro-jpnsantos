@@ -1,20 +1,10 @@
 ---
-import type { SanityDocument } from "@sanity/client";
-import { sanityClient } from "sanity:client";
-
-const POSTS_QUERY = `*[
-  _type == "post"
-  && defined(slug.current)
-]|order(publishedAt desc)[0...12]{_id, title, slug, publishedAt}`;
-
-const posts = await sanityClient.fetch<SanityDocument[]>(POSTS_QUERY);
-
-import Layout from "../layouts/Layout.astro";
 import About from "../components/sections/About.astro";
-import Skills from "../components/sections/Skills.astro";
-import Experience from "../components/sections/Experience.astro";
 import Education from "../components/sections/Education.astro";
+import Experience from "../components/sections/Experience.astro";
 import Projects from "../components/sections/Projects.astro";
+import Skills from "../components/sections/Skills.astro";
+import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Welcome to my portfolio!">
@@ -23,16 +13,4 @@ import Projects from "../components/sections/Projects.astro";
   <Experience />
   <Education />
   <Projects />
-  <!-- <ul class="flex flex-col gap-y-4">
-    {
-      posts.map((post) => (
-        <li class="hover:underline">
-          <a href={`/posts/${post.slug.current}`}>
-            <h2 class="text-xl font-semibold">{post.title}</h2>
-            <p>{new Date(post.publishedAt).toLocaleDateString()}</p>
-          </a>
-        </li>
-      ))
-    }
-  </ul> -->
 </Layout>

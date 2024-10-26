@@ -2,6 +2,8 @@
 import Header from "../components/sections/Header.astro";
 
 const { title } = Astro.props;
+import { getPersonalInfo } from "../utils/sanity";
+const personalInfo = await getPersonalInfo();
 ---
 
 <html lang="en">

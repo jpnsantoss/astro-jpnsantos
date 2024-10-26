@@ -1,55 +1,54 @@
 ---
+import { getPersonalInfo, type PersonalInfo } from "../../utils/sanity";
 import { Image } from "astro:assets";
+import Button from "../../components/Button.astro";
 
-import profilePicture from "../../assets/images/profile.jpeg";
-import LogoGithub from "../../assets/icons/LogoGithub.astro";
-import LogoInstagram from "../../assets/icons/LogoInstagram.astro";
+const personalInfo: PersonalInfo = await getPersonalInfo();
+
 import LogoLinkedIn from "../../assets/icons/LogoLinkedIn.astro";
 import LogoTwitter from "../../assets/icons/LogoTwitter.astro";
-
-import LocationIcon from "../../assets/icons/LocationIcon.astro";
 import MailIcon from "../../assets/icons/MailIcon.astro";
+import LogoGithub from "../../assets/icons/LogoGithub.astro";
+import LogoInstagram from "../../assets/icons/LogoInstagram.astro";
 import LinkIcon from "../../assets/icons/LinkIcon.astro";
-
-import Button from "../../components/Button.astro";
+import LocationIcon from "../../assets/icons/LocationIcon.astro";
 ---
 
 <header class="space-y-8">
   <div class="space-y-4">
     <Image
-      src={profilePicture}
+      src={personalInfo.profilePicture}
       alt="Profile Picture"
       width="150"
       height="150"
       class="rounded-full"
     />
     <div class="space-y-2">
-      <h2 class="font-bold text-4xl text-primary">João Santos</h2>
+      <h2 class="font-bold text-4xl text-primary">{personalInfo.name}</h2>
       <h3 class="text-xl">Full-stack web developer</h3>
     </div>
     <ul class="space-y-4">
       <li class="flex items-center gap-2 text-primary">
         <LocationIcon />
-        <span>Porto, Portugal</span>
+        <span>{personalInfo.location}</span>
       </li>
       <li class="flex items-center gap-2 text-primary">
         <MailIcon />
-        <span>jpnsantos14@gmail.com</span>
+        <span>{personalInfo.email}</span>
       </li>
     </ul>
     <p class="text-sm">
-      My passion is to build not only beautiful, but also functional websites
-      and applications.
+      {personalInfo.description}
     </p>
   </div>
-  <ul class="flex items-center gap-4">
-    <Button href="cv.pdf" target="_blank">
+  <ul class="flex items-center flex-wrap gap-4">
+    <Button href={personalInfo.resume} target="_blank">
       <LinkIcon />
       Resume
     </Button>
     <div class="flex items-center gap-2">
       <Button
-        href="ww.google.com"
+        href={personalInfo.github}
         target="_blank"
         size="icon"
         style="secondary"
@@ -57,7 +56,7 @@ import Button from "../../components/Button.astro";
         <LogoGithub />
       </Button>
       <Button
-        href="ww.google.com"
+        href={personalInfo.linkedin}
         target="_blank"
         size="icon"
         style="secondary"
@@ -65,7 +64,7 @@ import Button from "../../components/Button.astro";
         <LogoLinkedIn />
       </Button>
       <Button
-        href="ww.google.com"
+        href={personalInfo.instagram}
         target="_blank"
         size="icon"
         style="secondary"
@@ -73,7 +72,7 @@ import Button from "../../components/Button.astro";
         <LogoInstagram />
       </Button>
       <Button
-        href="ww.google.com"
+        href={personalInfo.twitter}
         target="_blank"
         size="icon"
         style="secondary"

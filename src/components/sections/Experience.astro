@@ -1,37 +1,7 @@
 ---
-import Badge from "../Badge.astro";
+import { getExperience } from "../../utils/sanity";
 
-interface Experience {
-  title: string;
-  company: {
-    name: string;
-    logo: string;
-  };
-  location: string;
-  startDate: string;
-  endDate?: string;
-  description: string;
-}
-
-const experiences: Experience[] = [
-  {
-    title: "Software Engineer",
-    company: {
-      name: "Facebook",
-      logo: "https://www.facebook.com/images/fb_icon_325x325.png",
-    },
-    location: "Menlo Park, CA",
-    startDate: "2017-01-01",
-    endDate: "2019-01-01",
-    description:
-      "Developer for the company's software, primarily focused on the website and internal applications. Responsible for hosting and maintenance of the software. Also provide IT support as needed.",
-  },
-];
-
-function formatDate(dateString: string) {
-  const options = { year: "numeric", month: "long" };
-  return new Date(dateString).toLocaleDateString();
-}
+const experiences = await getExperience();
 ---
 
 <section class="space-y-8 pb-16">
@@ -55,8 +25,7 @@ function formatDate(dateString: string) {
               <p class="text-sm text-muted-foreground">{experience.location}</p>
             </div>
             <p class="text-sm text-muted-foreground">
-              {formatDate(experience.startDate)} -{" "}
-              {experience.endDate ? formatDate(experience.endDate) : "Present"}
+              {experience.startDate} - {experience.endDate}
             </p>
             <p class="mt-4 text-gray-700">{experience.description}</p>
           </div>

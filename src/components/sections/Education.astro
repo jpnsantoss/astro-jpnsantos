@@ -1,34 +1,7 @@
 ---
-import Badge from "../Badge.astro";
+import { getEducation } from "../../utils/sanity";
 
-interface Education {
-  title: string;
-  institution: {
-    name: string;
-    logo: string;
-  };
-  location: string;
-  startDate: string;
-  endDate?: string;
-}
-
-const educationList: Education[] = [
-  {
-    title: "Software Engineer",
-    institution: {
-      name: "Facebook",
-      logo: "https://www.facebook.com/images/fb_icon_325x325.png",
-    },
-    location: "Menlo Park, CA",
-    startDate: "2017-01-01",
-    endDate: "2019-01-01",
-  },
-];
-
-function formatDate(dateString: string) {
-  const options = { year: "numeric", month: "long" };
-  return new Date(dateString).toLocaleDateString();
-}
+const educationList = await getEducation();
 ---
 
 <section class="space-y-8 pb-16">
@@ -54,8 +27,7 @@ function formatDate(dateString: string) {
               <p class="text-sm text-muted-foreground">{education.location}</p>
             </div>
             <p class="text-sm text-muted-foreground">
-              {formatDate(education.startDate)} -{" "}
-              {education.endDate ? formatDate(education.endDate) : "Present"}
+              {education.startDate} - {education.endDate}
             </p>
           </div>
         </div>
