@@ -1,17 +1,19 @@
 import { createClient } from "@sanity/client";
 import "dotenv/config";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// 1. Initialize the Sanity Client
 const sanity = createClient({
-  projectId: "dbowprqv", // Your project ID
+  projectId: "dbowprqv",
   dataset: "production",
   useCdn: false,
   apiVersion: "2024-03-10",
   token: process.env.SANITY_API_TOKEN,
 });
 
+// Initialize Gemini only if key is present
+const genAI = process.env.GEMINI_API_KEY ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY) : null;
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-const USERNAME = "jpnsantoss"; // Your GitHub username
+const USERNAME = "jpnsantoss";
 
 const getHeaders = (isRaw = false) => ({
   Accept: isRaw ? "application/vnd.github.v3.raw" : "application/vnd.github.v3+json",
@@ -19,105 +21,70 @@ const getHeaders = (isRaw = false) => ({
   ...(GITHUB_TOKEN ? { Authorization: `Bearer ${GITHUB_TOKEN}` } : {}),
 });
 
-// Helper: Fetch README
 async function fetchRepoReadme(owner: string, repo: string): Promise<string | null> {
   try {
     const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/readme`, { headers: getHeaders(true) });
-    if (!res.ok) return null;
-    return await res.text();
-  } catch {
+    return res.ok ? await res.text() : null;
+  } catch { return null; }
+}
+
+async function processWithGemini(readme: string, repoName: string): Promise<any> {
+  if (!genAI) return null;
+  try {
+    console.log(`   🤖 Sending ${repoName} to Gemini...`);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const result = await model.generateContent(`Analyze README for "${repoName}". Return JSON: {"title": string, "description": string, "detailedDescription": string, "tools": string[]}. README: ${readme.substring(0, 2000)}`);
+    const cleanJson = result.response.text().replace(/```json\n?|\n?```/g, "").trim();
+    return JSON.parse(cleanJson);
+  } catch (e: any) {
+    console.error(`   ❌ GEMINI ERROR (${repoName}):`, e.message);
     return null;
   }
 }
 
-function extractMetadata(readme: string | null) {
-  if (!readme) return {};
-  
-  const regex = new RegExp('');
-  const match = readme.match(regex);
-  
-  if (!match) return {};
-  try {
-    return JSON.parse(match[1].trim());
-  } catch {
-    return {};
-  }
-}
-
 async function syncProjects() {
-  console.log(`Fetching repositories for ${USERNAME}...`);
-  
+  console.log(`🚀 Starting sync for ${USERNAME}...`);
+
   try {
-    // 1. Fetch ALL repos for the user directly (More reliable than the search API)
-    const reposRes = await fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=updated`, { headers: getHeaders() });
-    if (!reposRes.ok) throw new Error(`GitHub API Error: ${reposRes.statusText}`);
-    
+    const reposRes = await fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100`, { headers: getHeaders() });
     const allRepos = await reposRes.json();
+    const portfolioRepos = allRepos.filter((r: any) => r.topics?.includes('portfolio') || r.topics?.includes('portfolio-full'));
     
-    // Filter repos that have 'portfolio' or 'portfolio-full' as a topic
-    const portfolioRepos = allRepos.filter((repo: any) => 
-      repo.topics?.includes('portfolio') || repo.topics?.includes('portfolio-full')
-    );
-
-    console.log(`Found ${portfolioRepos.length} portfolio projects on GitHub.`);
-
-    // 2. Query Sanity for existing GitHub URLs to prevent duplicates
-    const existingUrls: string[] = await sanity.fetch(`*[_type == "project"].githubUrl`);
+    const existingProjects = await sanity.fetch(`*[_type == "project"]{_id, name, detailedDescription, githubUrl}`);
 
     for (const repo of portfolioRepos) {
-      // If the URL already exists in Sanity (published or draft), skip it!
-      if (existingUrls.includes(repo.html_url)) {
-         console.log(`⏭️  Skipping (already exists in Sanity): ${repo.name}`);
-         continue;
+      const existingDoc = existingProjects.find((p: any) => p.githubUrl === repo.html_url);
+      
+      // SKIP if we already have a detailed description
+      if (existingDoc?.detailedDescription) {
+        console.log(`⏭️  Skipping: ${repo.name} (Already complete)`);
+        continue;
       }
 
       console.log(`📥 Processing: ${repo.name}...`);
-      
-      // Fetch extra data from README
       const readme = await fetchRepoReadme(USERNAME, repo.name);
-      const metadata = extractMetadata(readme);
+      const aiMetadata = readme ? await processWithGemini(readme, repo.name) : null;
 
-      // Prepare tools (prefer metadata, fallback to github topics excluding 'portfolio')
-      const tools = metadata.tools || repo.topics?.filter((t: string) => !t.includes('portfolio')) || [];
-
-      // If a thumbnail URL exists in the metadata, upload the image to Sanity!
-      let imageAsset = undefined;
-      if (metadata.thumbnail) {
-        console.log(`   🖼️  Uploading thumbnail for ${repo.name}...`);
-        try {
-          const imageRes = await fetch(metadata.thumbnail);
-          if (imageRes.ok) {
-            const buffer = await imageRes.arrayBuffer();
-            // Upload the image buffer directly to Sanity Assets
-            const asset = await sanity.assets.upload('image', Buffer.from(buffer), { filename: `${repo.name}-thumbnail` });
-            imageAsset = { _type: 'image', asset: { _type: 'reference', _ref: asset._id } };
-          }
-        } catch (err) {
-          console.log(`   ⚠️  Failed to upload thumbnail for ${repo.name}`);
-        }
-      }
-
-      // 3. Create Draft Document
       const sanityDocument = {
-        _id: `drafts.github-project-${repo.id}`, // The 'drafts.' prefix makes it unpublished!
+        _id: existingDoc?._id || `drafts.github-project-${repo.id}`,
         _type: "project",
-title: metadata.title || repo.name.replace(/-/g, " ").replace(/\b\w/g, (char: any) => char.toUpperCase()),        name: repo.name,
-        description: metadata.description || repo.description || "",
-        detailedDescription: metadata.detailedDescription || "",
-        tools: tools,
+        title: aiMetadata?.title || repo.name.replace(/-/g, " ").replace(/\b\w/g, (c: any) => c.toUpperCase()),
+        name: repo.name,
+        description: aiMetadata?.description || repo.description || "",
+        detailedDescription: aiMetadata?.detailedDescription || "",
+        tools: aiMetadata?.tools || repo.topics?.filter((t: string) => !t.includes('portfolio')) || [],
         githubUrl: repo.html_url,
-        liveUrl: repo.homepage || "",
-        ...(imageAsset && { thumbnail: imageAsset }) // Attach image if it was uploaded
       };
 
-      // Create it ONLY if the ID doesn't already exist
-      await sanity.createIfNotExists(sanityDocument);
-      console.log(`✅ Created Draft: ${repo.name}`);
+      await sanity.createOrReplace(sanityDocument);
+      console.log(`✅ Synced: ${repo.name}`);
+      
+      // Throttle to 4 seconds to avoid hitting API limits
+      await new Promise(resolve => setTimeout(resolve, 4000));
     }
-
-    console.log("🎉 Sync complete!");
+    console.log("🎉 All done!");
   } catch (error) {
-    console.error("❌ Sync failed:", error);
+    console.error("❌ Critical sync failure:", error);
   }
 }
 
