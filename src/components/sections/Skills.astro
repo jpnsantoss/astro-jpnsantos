@@ -1,60 +1,29 @@
 ---
 import Badge from "../Badge.astro";
+import { getSkills } from "../../utils/sanity";
 
-const languages = [
-  "TypeScript",
-  "Python",
-  "Go",
-  "JavaScript",
-  "C / C++",
-  "PHP",
-  "Java",
-  "Dart",
-  "SQL",
-];
+const skills = await getSkills();
 
-const frontend = ["React", "Svelte", "Astro", "Flutter", "Vue", "Angular"];
-
-const backend = [
-  "Next.js",
-  "Laravel",
-  "Express",
-  "Django",
-  "Firebase",
-  "PostgreSQL",
-  "MySQL",
-  "MongoDB",
-];
-
-const utilities = ["Docker", "Git", "AWS", "Figma", "Salesforce", "Jira"];
+const colorMap: Record<string, "blue" | "green" | "red" | "yellow"> = {
+  Languages: "blue",
+  Frontend: "green",
+  Backend: "red",
+  Utilities: "yellow",
+};
 ---
 
 <section class="space-y-8 pb-16">
   <h2 class="text-4xl text-primary font-bold">Skills</h2>
   <div class="space-y-6">
-    <div class="space-y-4">
-      <h3 class="text-2xl font-semibold">Languages</h3>
-      <div class="flex flex-wrap gap-1">
-        {languages.map((item) => <Badge color="blue">{item}</Badge>)}
+    {skills.map((skill) => (
+      <div class="space-y-4">
+        <h3 class="text-2xl font-semibold">{skill.title}</h3>
+        <div class="flex flex-wrap gap-1">
+          {skill.skills.map((item) => (
+            <Badge color={colorMap[skill.title] || "blue"}>{item}</Badge>
+          ))}
+        </div>
       </div>
-    </div>
-    <div class="space-y-2">
-      <h3 class="text-2xl font-semibold">Frontend</h3>
-      <div class="flex flex-wrap gap-1">
-        {frontend.map((item) => <Badge color="green">{item}</Badge>)}
-      </div>
-    </div>
-    <div class="space-y-2">
-      <h3 class="text-2xl font-semibold">Backend</h3>
-      <div class="flex flex-wrap gap-1">
-        {backend.map((item) => <Badge color="red">{item}</Badge>)}
-      </div>
-    </div>
-    <div class="space-y-2">
-      <h3 class="text-2xl font-semibold">Utilities</h3>
-      <div class="flex flex-wrap gap-1">
-        {utilities.map((item) => <Badge color="yellow">{item}</Badge>)}
-      </div>
-    </div>
+    ))}
   </div>
 </section>
