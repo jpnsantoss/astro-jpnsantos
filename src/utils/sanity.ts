@@ -107,3 +107,36 @@ export async function getProjects(): Promise<Project[]> {
   const data = await sanityClient.fetch(PROJECTS_QUERY);
   return data;
 }
+
+const PERSONAL_INFO_QUERY = `*[_type == "personalInfo"][0] {
+  name,
+  "profilePicture": profilePicture.asset->url,
+  location,
+  email,
+  description,
+  "resume": resume.asset->url,
+  github,
+  linkedin,
+  instagram,
+  twitter,
+  aboutMe
+}`;
+
+export interface PersonalInfo {
+  name: string;
+  profilePicture: string;
+  location: string;
+  email: string;
+  description: string;
+  resume: string;
+  github: string;
+  linkedin: string;
+  instagram: string;
+  twitter: string;
+  aboutMe: any[];
+}
+
+export async function getPersonalInfo(): Promise<PersonalInfo> {
+  const data = await sanityClient.fetch(PERSONAL_INFO_QUERY);
+  return data;
+}
