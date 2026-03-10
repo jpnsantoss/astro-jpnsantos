@@ -16,6 +16,13 @@ export default defineConfig({
         return S.list()
           .title('Content')
           .items([
+            S.documentListItem()
+              .title('Personal Info')
+              .schemaType('personalInfo')
+              .id('personalInfo'), 
+            
+            S.divider(),
+            
             orderableDocumentListDeskItem({ type: 'project', title: 'Projects', S, context }),
             orderableDocumentListDeskItem({ type: 'skill', title: 'Skills', S, context }),
             orderableDocumentListDeskItem({ type: 'experience', title: 'Experience', S, context }),
