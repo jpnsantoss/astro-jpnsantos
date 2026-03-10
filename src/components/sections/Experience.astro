@@ -3,6 +3,7 @@ import { getExperience } from "../../utils/sanity";
 import { PortableText } from 'astro-portabletext';
 
 const experiences = await getExperience();
+
 ---
 
 <section class="space-y-8 pb-16">
@@ -10,17 +11,6 @@ const experiences = await getExperience();
   <div class="space-y-6">
     {
       experiences.map((experience) => {
-        const components = {
-          list: {
-            bullet: ({ children }: any) => <ul class="list-disc ml-4">{children}</ul>,
-            number: ({ children }: any) => <ol class="list-decimal ml-4">{children}</ol>,
-          },
-          listItem: {
-            bullet: ({ children }: any) => <li>{children}</li>,
-            number: ({ children }: any) => <li>{children}</li>,
-          },
-        };
-
         return (
           <div class="bg-muted rounded-card p-6 flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-4">
             <img
@@ -48,8 +38,8 @@ const experiences = await getExperience();
                   </p>
                 </div>
               </div>
-              <div class="mt-4 text-gray-700">
-                <PortableText value={experience.description} components={components} />
+              <div class="mt-4 prose prose-sm max-w-none">
+                <PortableText value={experience.description} />
               </div>
             </div>
           </div>
