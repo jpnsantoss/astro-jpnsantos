@@ -3,13 +3,6 @@ import Badge from "../Badge.astro";
 import { getSkills } from "../../utils/sanity";
 
 const skills = await getSkills();
-
-const colorMap: Record<string, "blue" | "green" | "red" | "yellow"> = {
-  Languages: "blue",
-  Frontend: "green",
-  Backend: "red",
-  Utilities: "yellow",
-};
 ---
 
 <section class="space-y-8 pb-16">
@@ -20,7 +13,7 @@ const colorMap: Record<string, "blue" | "green" | "red" | "yellow"> = {
         <h3 class="text-2xl font-semibold">{skill.title}</h3>
         <div class="flex flex-wrap gap-1">
           {skill.skills.map((item) => (
-            <Badge color={colorMap[skill.title] || "blue"}>{item}</Badge>
+            <Badge color={skill.color}>{item}</Badge>
           ))}
         </div>
       </div>

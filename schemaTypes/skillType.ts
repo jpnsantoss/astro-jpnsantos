@@ -20,5 +20,19 @@ export const skillType = defineType({
       of: [{type: 'string'}],
       validation: (rule) => rule.required(),
     }),
+    defineField({
+      name: 'color',
+      type: 'string',
+      title: 'Color',
+      options: {
+        list: [
+          { title: 'Blue', value: 'blue' },
+          { title: 'Green', value: 'green' },
+          { title: 'Red', value: 'red' },
+          { title: 'Yellow', value: 'yellow' },
+        ],
+      },
+      validation: (rule) => rule.required(),
+    }),
   ],
 })

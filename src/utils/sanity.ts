@@ -3,13 +3,15 @@ import { sanityClient } from "sanity:client";
 const SKILLS_QUERY = `*[_type == "skill"] | order(orderRank) {
   _id,
   title,
-  skills
+  skills,
+  color
 }`;
 
 export interface Skill {
   _id: string;
   title: string;
   skills: string[];
+  color: "blue" | "green" | "red" | "yellow";
 }
 
 export async function getSkills(): Promise<Skill[]> {
