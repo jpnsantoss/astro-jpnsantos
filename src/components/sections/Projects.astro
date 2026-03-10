@@ -1,52 +1,63 @@
 ---
-import { Image } from "astro:assets";
 import LinkIcon from "../../assets/icons/LinkIcon.astro";
 import LogoGithub from "../../assets/icons/LogoGithub.astro";
-import { fetchGitHubRepos } from "../../utils/githubApi";
+import { getProjects } from "../../utils/sanity";
 import Badge from "../Badge.astro";
 import Button from "../Button.astro";
 
-const repos = await fetchGitHubRepos("jpnsantoss");
+const projects = await getProjects();
 ---
 
 <section class="space-y-8 pb-16">
   <h2 class="text-4xl text-primary font-bold">Projects</h2>
   <div class="space-y-6">
     {
-      repos.length > 0 ? (
-        repos.map((repo: any) => (
-          <div class="bg-muted rounded-lg p-6 border grid md:grid-cols-3 gap-4 items-center">
+      projects.length > 0 ? (
+        projects.map((project) => (
+          <div class="bg-muted rounded-lg p-6 border grid md:grid-cols-3 gap-6 items-center">
             <div class="md:col-span-2">
-              {repo.project_details?.title ? (
-                <div>
-                  <h3 class="text-2xl font-semibold text-primary">
-                    {repo.project_details.title}
-                  </h3>
-                  <h4 class="text-lg text-muted-foreground">{repo.name}</h4>
-                </div>
-              ) : (
-                <h3 class="text-2xl font-semibold text-primary">{repo.name}</h3>
-              )}
-              <h4 class="text-primary">{repo.description}</h4>
-              <p class="text-sm mt-4">{repo.project_details?.description}</p>
-              <div class="flex flex-wrap gap-2 mt-2">
-                {repo.project_details?.tools.map((tool: string) => (
-                  <Badge>{tool}</Badge>
-                ))}
+              <div>
+                <h3 class="text-2xl font-semibold text-primary">
+                  {project.title || project.name}
+                </h3>
+                {project.name && project.title && (
+                  <h4 class="text-lg text-muted-foreground">{project.name}</h4>
+                )}
               </div>
-              <div class="flex items-center mt-4">
-                <Button
-                  href={repo.html_url}
-                  target="_blank"
-                  size="sm"
-                  style="link"
-                >
-                  <LogoGithub class="w-5 h-5 mr-1" />
-                  View code
-                </Button>
-                {repo.homepage && (
+              
+              {project.description && (
+                <h4 class="text-primary mt-2 font-medium">{project.description}</h4>
+              )}
+              
+              {project.detailedDescription && (
+                <p class="text-sm mt-4 text-muted-foreground leading-relaxed">
+                  {project.detailedDescription}
+                </p>
+              )}
+              
+              {project.tools && project.tools.length > 0 && (
+                <div class="flex flex-wrap gap-2 mt-4">
+                  {project.tools.map((tool: string) => (
+                    <Badge>{tool}</Badge>
+                  ))}
+                </div>
+              )}
+              
+              <div class="flex items-center mt-6 gap-2">
+                {project.githubUrl && (
                   <Button
-                    href={repo.homepage}
+                    href={project.githubUrl}
+                    target="_blank"
+                    size="sm"
+                    style="link"
+                  >
+                    <LogoGithub class="w-5 h-5 mr-1" />
+                    View code
+                  </Button>
+                )}
+                {project.liveUrl && (
+                  <Button
+                    href={project.liveUrl}
                     target="_blank"
                     size="sm"
                     style="link"
@@ -57,19 +68,22 @@ const repos = await fetchGitHubRepos("jpnsantoss");
                 )}
               </div>
             </div>
-            {repo.project_details?.thumbnail && (
-              <Image
-                src={repo.project_details.thumbnail}
-                alt="Thumbnail"
-                width={400}
-                height={200}
-                class="rounded-lg w-full"
-              />
+            
+            {project.thumbnail && (
+              <div class="flex justify-center md:justify-end">
+                <img
+                  src={project.thumbnail}
+                  alt={project.title || "Project Thumbnail"}
+                  width="400"
+                  height="200"
+                  class="rounded-lg w-full object-cover shadow-sm border"
+                />
+              </div>
             )}
           </div>
         ))
       ) : (
-        <p>Loading...</p>
+        <p class="text-muted-foreground">No projects found. Add some in Sanity Studio!</p>
       )
     }
   </div>

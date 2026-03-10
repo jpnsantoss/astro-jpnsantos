@@ -1,6 +1,6 @@
 import { sanityClient } from "sanity:client";
 
-const SKILLS_QUERY = `*[_type == "skill"]{
+const SKILLS_QUERY = `*[_type == "skill"] | order(orderRank) {
   _id,
   title,
   skills
@@ -18,7 +18,7 @@ export async function getSkills(): Promise<Skill[]> {
 }
 
 // Education Query and Interface
-const EDUCATION_QUERY = `*[_type == "education"]{
+const EDUCATION_QUERY = `*[_type == "education"] | order(orderRank) {
   _id,
   title,
   institution {
@@ -48,7 +48,7 @@ export async function getEducation(): Promise<Education[]> {
 }
 
 // Experience Query and Interface
-const EXPERIENCE_QUERY = `*[_type == "experience"]{
+const EXPERIENCE_QUERY = `*[_type == "experience"] | order(orderRank) {
   _id,
   title,
   company {
@@ -76,5 +76,34 @@ export interface Experience {
 
 export async function getExperience(): Promise<Experience[]> {
   const data = await sanityClient.fetch(EXPERIENCE_QUERY);
+  return data;
+}
+
+const PROJECTS_QUERY = `*[_type == "project"] | order(orderRank) {
+  _id,
+  title,
+  name,
+  description,
+  detailedDescription,
+  tools,
+  githubUrl,
+  liveUrl,
+  "thumbnail": thumbnail.asset->url
+}`;
+
+export interface Project {
+  _id: string;
+  title?: string;
+  name?: string;
+  description?: string;
+  detailedDescription?: string;
+  tools?: string[];
+  githubUrl?: string;
+  liveUrl?: string;
+  thumbnail?: string;
+}
+
+export async function getProjects(): Promise<Project[]> {
+  const data = await sanityClient.fetch(PROJECTS_QUERY);
   return data;
 }
