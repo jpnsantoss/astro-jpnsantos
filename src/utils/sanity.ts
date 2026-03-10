@@ -73,7 +73,7 @@ export interface Experience {
   location: string;
   startDate: string;
   endDate: string;
-  description: string;
+  description: any[];
 }
 
 export async function getExperience(): Promise<Experience[]> {

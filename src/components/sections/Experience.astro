@@ -1,5 +1,6 @@
 ---
 import { getExperience } from "../../utils/sanity";
+import { PortableText } from 'astro-portabletext';
 
 const experiences = await getExperience();
 ---
@@ -35,7 +36,9 @@ const experiences = await getExperience();
                 </p>
               </div>
             </div>
-            <p class="mt-4 text-gray-700">{experience.description}</p>
+            <div class="mt-4 text-gray-700">
+              <PortableText value={experience.description} />
+            </div>
           </div>
         </div>
       ))
