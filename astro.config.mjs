@@ -9,6 +9,9 @@ export default defineConfig({
   adapter: node({     
     mode: 'standalone',
   }),
+  server: {
+    port: parseInt(process.env.PORT) || 4321,
+  },
   integrations: [tailwind(), sanity({
     projectId: "dbowprqv",
     dataset: "production",
